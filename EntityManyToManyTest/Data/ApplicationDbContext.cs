@@ -20,7 +20,17 @@ namespace EntityManyToManyTest.Data
         public DbSet<ClassNameTopic> ClassNameTopics { get; set; }
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
-            builder.Entity<ClassNameTopic>().HasKey(sc => new {sc.ClassNameId, sc.TopicId});
+            builder.Entity<ClassNameTopic>()
+                .HasKey(sc => new {sc.ClassNameId, sc.TopicId});
+            builder.Entity<ClassNameTopic>()
+                .HasOne(ct => ct.ClassName)
+                .WithMany(c => c.ClassNameTopics)
+                .HasForeignKey(c => c.ClassNameId);
+            builder.Entity<ClassNameTopic>()
+                .HasOne(ct => ct.Topic)
+                .WithMany(c => c.ClassNameTopics)
+                .HasForeignKey(c => c.TopicId);
+
         }
     }
 

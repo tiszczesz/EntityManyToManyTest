@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EntityManyToManyTest.Data.Migrations
 {
-    public partial class addNewSet : Migration
+    public partial class addTopic_Class : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

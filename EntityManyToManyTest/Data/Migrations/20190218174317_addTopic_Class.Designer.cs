@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityManyToManyTest.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190217203200_addNewSet")]
-    partial class addNewSet
+    [Migration("20190218174317_addTopic_Class")]
+    partial class addTopic_Class
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

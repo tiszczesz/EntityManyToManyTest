@@ -7,27 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EntityManyToManyTest.Data;
 using EntityManyToManyTest.Models;
-using EntityManyToManyTest.ModelViews;
 
 namespace EntityManyToManyTest.Controllers
 {
-    public class ClassNamesController : Controller
+    public class TopicController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ClassNamesController(ApplicationDbContext context)
+        public TopicController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: ClassNames
+        // GET: Topic
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ClassNames
-                .Include(c=>c.ClassNameTopics).ThenInclude(c=>c.Topic).ToListAsync());
+            return View(await _context.Topics.ToListAsync());
         }
 
-        // GET: ClassNames/Details/5
+        // GET: Topic/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,42 +33,39 @@ namespace EntityManyToManyTest.Controllers
                 return NotFound();
             }
 
-            var className = await _context.ClassNames
+            var topic = await _context.Topics
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (className == null)
+            if (topic == null)
             {
                 return NotFound();
             }
 
-            return View(className);
+            return View(topic);
         }
 
-        // GET: ClassNames/Create
-        public async Task<IActionResult> Create() {
-            var vm = new ModelViewClassNameTopic();
-            vm.Topics = await _context.Topics.ToListAsync();
-            
-
-            return View(vm);
+        // GET: Topic/Create
+        public IActionResult Create()
+        {
+            return View();
         }
 
-        // POST: ClassNames/Create
+        // POST: Topic/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] ClassName className)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Topic topic)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(className);
+                _context.Add(topic);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(className);
+            return View(topic);
         }
 
-        // GET: ClassNames/Edit/5
+        // GET: Topic/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,22 +73,22 @@ namespace EntityManyToManyTest.Controllers
                 return NotFound();
             }
 
-            var className = await _context.ClassNames.FindAsync(id);
-            if (className == null)
+            var topic = await _context.Topics.FindAsync(id);
+            if (topic == null)
             {
                 return NotFound();
             }
-            return View(className);
+            return View(topic);
         }
 
-        // POST: ClassNames/Edit/5
+        // POST: Topic/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] ClassName className)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Topic topic)
         {
-            if (id != className.Id)
+            if (id != topic.Id)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace EntityManyToManyTest.Controllers
             {
                 try
                 {
-                    _context.Update(className);
+                    _context.Update(topic);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClassNameExists(className.Id))
+                    if (!TopicExists(topic.Id))
                     {
                         return NotFound();
                     }
@@ -118,10 +113,10 @@ namespace EntityManyToManyTest.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(className);
+            return View(topic);
         }
 
-        // GET: ClassNames/Delete/5
+        // GET: Topic/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,30 +124,30 @@ namespace EntityManyToManyTest.Controllers
                 return NotFound();
             }
 
-            var className = await _context.ClassNames
+            var topic = await _context.Topics
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (className == null)
+            if (topic == null)
             {
                 return NotFound();
             }
 
-            return View(className);
+            return View(topic);
         }
 
-        // POST: ClassNames/Delete/5
+        // POST: Topic/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var className = await _context.ClassNames.FindAsync(id);
-            _context.ClassNames.Remove(className);
+            var topic = await _context.Topics.FindAsync(id);
+            _context.Topics.Remove(topic);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClassNameExists(int id)
+        private bool TopicExists(int id)
         {
-            return _context.ClassNames.Any(e => e.Id == id);
+            return _context.Topics.Any(e => e.Id == id);
         }
     }
 }
